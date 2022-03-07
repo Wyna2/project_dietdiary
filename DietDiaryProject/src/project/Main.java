@@ -14,20 +14,23 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 
 public class Main extends JFrame implements ActionListener {
 
-	DbConnect db = new DbConnect();
-	
+	DbConnect db=new DbConnect();
+
 	Container cp;
 	JButton loginBtn,joinBtn;
 	JLabel lblImg,imgtext;
-	JTextField tfid,tfpw;
+	JTextField tfid;
+	JPasswordField tfpw;
 	ImageIcon img;
 	
-	MainJoin joinFrame=new MainJoin("회원가입");
+	MainJoin jf=new MainJoin("회원가입");
+	BMI bmi=new BMI("BMI");
 	
 	public Main(String title) {
 		
@@ -53,7 +56,8 @@ public class Main extends JFrame implements ActionListener {
 		this.add(tfid);
 		
 		//패스워드 입력 텍스트
-		tfpw=new JTextField();
+		tfpw=new JPasswordField(20);
+		tfpw.setEchoChar('*');
 		tfpw.setBounds(145, 240, 90, 30);
 		this.add(tfpw);
 		
@@ -86,7 +90,7 @@ public class Main extends JFrame implements ActionListener {
 		joinBtn.setBounds(50, 290, 85, 30);
 		this.add(joinBtn);
 		joinBtn.addActionListener(this);
-		
+
 		//이미지 삽입
 		cp.setLayout(null);
 		
@@ -94,25 +98,38 @@ public class Main extends JFrame implements ActionListener {
 		lblImg=new JLabel(img);
 		lblImg.setBounds(17, 30, 250, 150);
 		cp.add(lblImg);
-		
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		Connection conn=db.getOracle();
-		
-		
 		Object ob=e.getSource();
 		
 		if(ob==joinBtn)
 		{
-			joinFrame.setVisible(true);
-		} else if(ob==loginBtn) {
-			//if(tfid== and tfpw==)
+			jf.setVisible(true);
+		} else if(ob==loginBtn)
+		{
+			String pw="";
+			char[] secretpw=tfpw.getPassword();
+			for(char cha:secretpw) {
+				Character.toString(cha);
+				pw += (pw.equals("")) ? ""+cha+"" : ""+cha+"";
+			}
+			
+			String id=tfid.getText();
+			
+			LoginFrame log=LoginFrame.getInstance();
+			int result=log.findByIdPw(id, pw);
+			if(result==1) {
+				JOptionPane.showMessageDialog(null, "로그인 성공");
+				
+				this.setVisible(false);
+				bmi.setVisible(true);
+			} else {
+				JOptionPane.showMessageDialog(null,	"로그인 실패!");
+			}
 		}
-		
-		
 	}
 	
 	

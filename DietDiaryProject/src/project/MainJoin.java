@@ -167,7 +167,9 @@ public class MainJoin extends JFrame implements ActionListener {
 			
 			System.out.println("가입성공!");
 			this.setVisible(false);
+		
 		}
+		
 	}
 
 	/*

@@ -36,15 +36,15 @@ public class BMI extends JFrame implements ActionListener {
 		super(title);
 		cp=this.getContentPane();
 		
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setBounds(800, 100, 400, 600);
 		cp.setBackground(new Color(204,219,226));//..bmi
-		//cp.setBackground(new Color(226,204,208));//..diet
-		//cp.setBackground(new Color(204,226,211));//..main
+		//cp.setBackground(new Color(226,204,208));//..main
+		//cp.setBackground(new Color(204,226,211));//..diet
 		
 		this.initDesign();
 		setLocationRelativeTo(null);
-		this.setVisible(true);
+		//this.setVisible(true);
 	}
 	
 	public void initDesign()
@@ -67,6 +67,7 @@ public class BMI extends JFrame implements ActionListener {
 		btnBmi.setBounds(30, 10, 140, 50);
 		btnBmi.setBorderPainted(false); //jbutton border(외곽선) 없애기
 		this.add(btnBmi);
+		btnBmi.addActionListener(this);
 		
 		btnDiet = new JButton("DIET");
 		btnDiet.setFont(f1);
@@ -76,6 +77,7 @@ public class BMI extends JFrame implements ActionListener {
 		btnDiet.setBorderPainted(false);
 		btnDiet.setOpaque(false);
 		this.add(btnDiet);
+		btnDiet.addActionListener(this);
 		
 		//액션버튼생성..btnCheck.btnSave,btnHistory
 		btnCheck = new JButton("BMI Calculate");
@@ -196,7 +198,10 @@ public class BMI extends JFrame implements ActionListener {
 		} else if(ob==btnHistory) {
 			BMI_History history = new BMI_History("BMI Data");
 			history.setVisible(true);
-		}
+		} else if(ob==btnDiet) {
+			Diet diet = new Diet("name님의 DIET");
+			diet.setVisible(true);
+		} 
 		
 	}
 	
@@ -236,8 +241,12 @@ public class BMI extends JFrame implements ActionListener {
 		
 	}
 	
+	
+	/*
 	public static void main(String[] args) {
-		new BMI("Diet Diary");
+		new BMI("NAME님의 BMI");
 	}
-
+	*/
+	
+	
 }
