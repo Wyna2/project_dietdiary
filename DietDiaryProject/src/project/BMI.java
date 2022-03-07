@@ -23,14 +23,14 @@ import javax.swing.border.LineBorder;
 import oracle.sql.DATE;
 
 public class BMI extends JFrame implements ActionListener {
-
+	
 	DbConnect db = new DbConnect();
 	
 	Container cp;
 	Font f1,f2,f3,f4,f5;
 	JLabel lbHeight,lbWeight,lbcm,lbkg,lbResult;
 	JTextField tHeight,tWeight;
-	JButton btnBmi,btnDiet,btnCheck,btnSave,btnHistory;
+	JButton btnBmi,btnDiet,btnCheck,btnSave,btnHistory;	
 	
 	public BMI(String title) {
 		super(title);
@@ -144,7 +144,7 @@ public class BMI extends JFrame implements ActionListener {
 		add(lbkg);
 		
 		
-		//결과라벨
+		//결과라벨	
 		lbResult = new JLabel("측정결과",JLabel.CENTER);
 		lbResult.setFont(f3);
 		lbResult.setBounds(60, 280, 260, 170);
@@ -196,20 +196,29 @@ public class BMI extends JFrame implements ActionListener {
 			JOptionPane.showMessageDialog(this, "저장이 완료되었습니다.");
 			
 		} else if(ob==btnHistory) {
+			
 			BMI_History history = new BMI_History("BMI Data");
 			history.setVisible(true);
+			
 		} else if(ob==btnDiet) {
-			Diet diet = new Diet("name님의 DIET");
+			
+			Diet diet = new Diet("DIET");
 			diet.setVisible(true);
+			this.setVisible(false);
+			
 		} 
 		
 	}
 	
 	public void insertData()
-	{
+	{		
 		double calHeight = Double.parseDouble(tHeight.getText());
 		double calWeight = Double.parseDouble(tWeight.getText());
 		double calBmi = Math.round(calWeight/(calHeight*calHeight)*10000*100d)/100d;
+		
+		//main id 불러오기!
+		JTextField tfid=Project1.getTfid();
+		String id = tfid.getText();
 		
 		String height=tHeight.getText();
 		String weight=tWeight.getText();
@@ -217,8 +226,8 @@ public class BMI extends JFrame implements ActionListener {
 		SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy-MM-dd");
 		String date=simpleDate.format(new java.util.Date());
 
-		String sql="insert into bmi (seq,height,weight,bmi,writedate) values (seq_bmi.nextval,?,?,?,?)";
-		System.out.println(height+", "+weight+", "+bmi);
+		String sql="insert into bmi (seq,id,height,weight,bmi,writedate) values (seq_bmi.nextval,?,?,?,?,?)";
+		System.out.println(id+", "+height+", "+weight+", "+bmi);
 		
 		Connection conn=db.getOracle();
 		PreparedStatement pstmt=null;
@@ -226,11 +235,12 @@ public class BMI extends JFrame implements ActionListener {
 		try {
 			pstmt=conn.prepareStatement(sql);
 			
-			//?..7개 바인딩
-			pstmt.setString(1, height);
-			pstmt.setString(2, weight);
-			pstmt.setString(3, bmi);
-			pstmt.setString(4, date);
+			//?..5개 바인딩
+			pstmt.setString(1, id);
+			pstmt.setString(2, height);
+			pstmt.setString(3, weight);
+			pstmt.setString(4, bmi);
+			pstmt.setString(5, date);
 			pstmt.execute();
 			
 		} catch (SQLException e) {

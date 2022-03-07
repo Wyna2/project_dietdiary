@@ -20,7 +20,7 @@ import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
-public class MainJoin extends JFrame implements ActionListener {
+public class JoinFrame extends JFrame implements ActionListener {
 
 	DbConnect db = new DbConnect();
 		
@@ -31,7 +31,7 @@ public class MainJoin extends JFrame implements ActionListener {
 	JRadioButton rbMan,rbWoman;
 	JRadioButton[] sex=new JRadioButton[2];
 	
-	public MainJoin(String title) {
+	public JoinFrame(String title) {
 		super(title);
 		cp=this.getContentPane();
 		this.setBounds(790, 380 ,220 ,330);

@@ -18,22 +18,18 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 
-public class Main extends JFrame implements ActionListener {
+public class Project1 extends JFrame implements ActionListener {
 
 	DbConnect db=new DbConnect();
 
 	Container cp;
 	JButton loginBtn,joinBtn;
 	JLabel lblImg,imgtext;
-	JTextField tfid;
+	static JTextField tfid;
 	JPasswordField tfpw;
 	ImageIcon img;
-	
-	MainJoin jf=new MainJoin("회원가입");
-	BMI bmi=new BMI("BMI");
-	
-	public Main(String title) {
-		
+			
+	public Project1(String title) {
 		super(title);
 		cp=this.getContentPane();
 		this.setBounds(750, 330 ,300 ,400);
@@ -43,7 +39,6 @@ public class Main extends JFrame implements ActionListener {
 		//디자인 메서드 호출..
 		initDesign();
 		this.setVisible(true);
-		
 	}
 	
 	public void initDesign()
@@ -107,6 +102,7 @@ public class Main extends JFrame implements ActionListener {
 		
 		if(ob==joinBtn)
 		{
+			JoinFrame jf=new JoinFrame("회원가입");
 			jf.setVisible(true);
 		} else if(ob==loginBtn)
 		{
@@ -118,23 +114,33 @@ public class Main extends JFrame implements ActionListener {
 			}
 			
 			String id=tfid.getText();
-			
+						
 			LoginFrame log=LoginFrame.getInstance();
 			int result=log.findByIdPw(id, pw);
 			if(result==1) {
 				JOptionPane.showMessageDialog(null, "로그인 성공");
-				
 				this.setVisible(false);
+				BMI bmi = new BMI("BMI");
 				bmi.setVisible(true);
+				
 			} else {
 				JOptionPane.showMessageDialog(null,	"로그인 실패!");
 			}
 		}
 	}
-	
-	
+
+	public static JTextField getTfid() {
+		return tfid;
+	}
+
+	public void setTfid(JTextField tfid) {
+		this.tfid = tfid;
+	}
+
 	public static void main(String[] args) {
-		new Main("로그인 화면");
+		new Project1("MAIN");
+		
+		
 	}
 
 }
