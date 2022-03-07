@@ -32,7 +32,7 @@ DbConnect db = new DbConnect();
 	JLabel lbBreakfast,lbLunch,lbDinner,lbResult,lbKcal1,lbKcal2,lbKcal3;
 	JComboBox<String> cBreakfast,cLunch,cDinner;
 	JTextField tBreakfast,tLunch,tDinner,tKcal1,tKcal2,tKcal3;
-	JButton btnBmi,btnDiet,btnSave,btnHistory;
+	JButton btnBmi,btnDiet,btnTotal,btnSave,btnHistory;
 		
 	public Diet(String title) {
 		super(title);
@@ -120,10 +120,11 @@ DbConnect db = new DbConnect();
 		tBreakfast.setBorder(new LineBorder(Color.white,1));
 		add(tBreakfast);		
 		//kcal텍스트
-		tKcal1 = new JTextField("1234");
+		tKcal1 = new JTextField("0");
 		tKcal1.setFont(f3);
 		tKcal1.setBounds(210, 140, 50, 50);
 		tKcal1.setBorder(null);
+		tKcal1.setOpaque(false);
 		add(tKcal1);
 		//라벨생성2..kcal 라벨
 		lbKcal1 = new JLabel("Kcal");
@@ -152,10 +153,11 @@ DbConnect db = new DbConnect();
 		tLunch.setBorder(new LineBorder(Color.white,1));
 		add(tLunch);
 				
-		tKcal2 = new JTextField("1234");
+		tKcal2 = new JTextField("0");
 		tKcal2.setFont(f3);
 		tKcal2.setBounds(210, 240, 50, 50);
 		tKcal2.setBorder(null);
+		tKcal2.setOpaque(false);
 		add(tKcal2);
 					
 		lbKcal2 = new JLabel("Kcal");
@@ -185,10 +187,11 @@ DbConnect db = new DbConnect();
 		tDinner.setBorder(new LineBorder(Color.white,1));
 		add(tDinner);
 						
-		tKcal3 = new JTextField("1234");
+		tKcal3 = new JTextField("0");
 		tKcal3.setFont(f3);
 		tKcal3.setBounds(210, 340, 50, 50);
 		tKcal3.setBorder(null);
+		tKcal3.setOpaque(false);
 		add(tKcal3);
 
 		lbKcal3 = new JLabel("Kcal");
@@ -197,23 +200,31 @@ DbConnect db = new DbConnect();
 		lbKcal3.setForeground(new Color(40,140,148));
 		add(lbKcal3);
 		
+		//btnTotal
+		btnTotal = new JButton("Total");
+		btnTotal.setFont(f2);
+		btnTotal.setBounds(40, 390, 90, 65);
+		btnTotal.setBackground(Color.white);
+		btnTotal.setForeground(new Color(66,163,118));
+		btnTotal.setBorderPainted(false);
+		add(btnTotal);
+		btnTotal.addActionListener(this);
 		
 		//결과라벨
-		lbResult = new JLabel("측정결과",JLabel.CENTER);
-		
+		lbResult = new JLabel("",JLabel.CENTER);
+		/*
 		if(tKcal1!=null && tKcal2!=null && tKcal3!=null) {
 			int calBreakfast = Integer.parseInt(tKcal1.getText());
 			int calLunch = Integer.parseInt(tKcal2.getText());
 			int calDinner = Integer.parseInt(tKcal3.getText());
 			int calResult = calBreakfast+calLunch+calDinner;
-			lbResult.setText("<html>오늘 섭취한 kcal은<br>총 "+calResult+"Kcal 입니다.</html>");
-		}
+			lbResult.setText("<html>오늘 섭취한 Kcal은<br>총 "+calResult+" Kcal 입니다.</html>");
+		}*/
 		
 		lbResult.setFont(f5);
-		lbResult.setBounds(60, 400, 260, 50);
+		lbResult.setBounds(130, 390, 190, 65);
 		lbResult.setBorder(new LineBorder(new Color(66,163,118),5));
 		this.add(lbResult);
-		
 		
 		//판넬생성..board
 		JPanel board = new JPanel();
@@ -278,7 +289,7 @@ DbConnect db = new DbConnect();
 		
 		try {
 			stmt=conn.createStatement();
-			String sql="select name from cbdiet";
+			String sql="select * from cbdiet";
 			rs=stmt.executeQuery(sql);
 		
 			while(rs.next()) {
@@ -300,10 +311,6 @@ DbConnect db = new DbConnect();
 		
 		Object ob=e.getSource();
 		
-		//main id 불러오기!
-		JTextField tfid=Project1.getTfid();
-		String id = tfid.getText();
-		
 			if(ob==btnBmi) {
 				BMI bmi = new BMI("BMI");
 				bmi.setVisible(true);
@@ -314,12 +321,23 @@ DbConnect db = new DbConnect();
 			} else if(ob==btnHistory) {
 				Diet_History dhistory = new Diet_History("DIET HISTORY");
 				dhistory.setVisible(true);
+			} else if(ob==btnTotal) {
+
+					int calBreakfast = Integer.parseInt(tKcal1.getText());
+					int calLunch = Integer.parseInt(tKcal2.getText());
+					int calDinner = Integer.parseInt(tKcal3.getText());
+					int calResult = calBreakfast+calLunch+calDinner;
+					
+					System.out.println(calResult);
+					lbResult.setText("<html>오늘 섭취한 Kcal은<br>총 "+calResult+" Kcal 입니다.</html>");
+				
 			}
 				
 		}
 	
 	@Override
 		public void itemStateChanged(ItemEvent e) {
+	
 			String menu1=(String)cBreakfast.getSelectedItem();
 			tBreakfast.setText(menu1);
 			String menu2=(String)cLunch.getSelectedItem();
@@ -327,7 +345,9 @@ DbConnect db = new DbConnect();
 			String menu3=(String)cDinner.getSelectedItem();
 			tDinner.setText(menu3);
 			
+			
 		}
+	
 	
 	public static void main(String[] args) {
 		new Diet("DIET");
